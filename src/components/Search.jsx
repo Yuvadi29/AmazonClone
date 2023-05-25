@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    MenuIcon,
     MagnifyingGlassIcon,
     ShoppingCartIcon,
 } from '@heroicons/react/24/outline';
