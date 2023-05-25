@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import React from 'react';
+import Search from './Search';
 
 const Header = () => {
   return (
     <header>
       {/* Top Navbar */}
       <div className='flex items-center bg-Amazon_blue p-1 flex-grow py-2'>
+      {/* Defining for the Logo Part */}
         <div className='mt-2 flex items-center flex-grow sm:flex-grow-0'>
           <Image
           src='https://res.cloudinary.com/djfdsdzxo/image/upload/v1684985172/AmazonClone/amazon_PNG11_tbebg9.png' 
@@ -15,6 +17,8 @@ const Header = () => {
           className='cursor-pointer'
           />
         </div>
+
+        <Search />
 
       </div>
 
