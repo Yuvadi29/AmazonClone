@@ -8,14 +8,14 @@ const Header = () => {
     <header>
       {/* Top Navbar */}
       <div className='flex items-center bg-Amazon_blue p-1 flex-grow py-2'>
-      {/* Defining for the Logo Part */}
+        {/* Defining for the Logo Part */}
         <div className='mt-2 flex items-center flex-grow sm:flex-grow-0'>
           <Image
-          src='https://res.cloudinary.com/djfdsdzxo/image/upload/v1684985172/AmazonClone/amazon_PNG11_tbebg9.png' 
-          width={150}
-          height={40}
-          objectFit="contain"
-          className='cursor-pointer'
+            src='https://res.cloudinary.com/djfdsdzxo/image/upload/v1684985172/AmazonClone/amazon_PNG11_tbebg9.png'
+            width={150}
+            height={40}
+            objectFit="contain"
+            className='cursor-pointer'
           />
         </div>
 
@@ -26,7 +26,7 @@ const Header = () => {
       {/* Bottom Navbar */}
       <div className='flex items-center space-x-3 p-2 pl-6 bg-Amazon_blue-light text-sm text-white'>
         <p className='link flex items-center'>
-          <Bars4Icon className='h-6 mr-1'/>
+          <Bars4Icon className='h-6 mr-1' />
           All
         </p>
         <p className="link">Today's Deals</p>
