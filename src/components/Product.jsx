@@ -16,15 +16,14 @@ const Product = ({ id, title, price, description, category, image }) => {
 
 
     return (
-        <div className='relative flex flex-col m-5 z-30 p-10 bg-white'>
-            {/* Defining the category */}
+        <div className='relative flex flex-col m-5 z-30 p-10 bg-white items-center justify-center'>
+            {/* Defining the category */} 
             <p className='absolute top-2 right-2 text-xs italic text-gray-400'>{category}</p>
-            {/* Defining the Image */}
             <Image
                 src={image}
                 height={200}
                 width={200}
-                objectFit='contain'
+                // objectFit='contain'
             />
             {/* Defining the title */}
             <h4 className='my-3'>{title}</h4>
