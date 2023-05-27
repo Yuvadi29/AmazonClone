@@ -3,6 +3,7 @@ import {
     MagnifyingGlassIcon,
     ShoppingCartIcon,
 } from '@heroicons/react/24/outline';
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const Search = () => {
     return (
@@ -14,7 +15,7 @@ const Search = () => {
 
             {/*Shopping Cart section  */}
             <div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
-                <div className='link'>
+                <div className='link' onClick={signIn}>
                     <p>Hello, Aditya</p>
                     <p className='font-extrabold md:text-sm'>Account & Lists</p>
                 </div>

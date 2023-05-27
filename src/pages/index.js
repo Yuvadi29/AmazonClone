@@ -15,7 +15,7 @@ export default function Home({ products }) {
       <main className="max-w-screen-2xl">
         <Banner />
         {/* We pass the props defined here to the ones we have defined in the ProductFeed.jsx file */}
-        <ProductFeed products={products}/> 
+        <ProductFeed products={products} />
       </main>
     </div>
   );
@@ -24,12 +24,14 @@ export default function Home({ products }) {
 // For getting all the products we will use FakeStoreApi. Using NextJs we use Server Side Rendering where the server iteself renders the page and gives us the response back rather than the client rendering the page.
 
 // For SSR we use GetServerSideProps
-export async function getServerSideProps(context){
+export async function getServerSideProps(context) {
   // We declare a variable and store the input from the API into that variable
   const products = await fetch("https://fakestoreapi.com/products").then((response) => response.json());
 
   // Returning the props and add a key value pair to determine the specefic props
-  return { props: {
-    products,
-  }}
+  return {
+    props: {
+      products,
+    }
+  }
 }
