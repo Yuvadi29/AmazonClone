@@ -22,6 +22,7 @@ const Product = ({ id, title, price, description, category, image }) => {
                 src={image}
                 height={200}
                 width={200}
+                alt='ProductImages'
             // objectFit='contain'
             />
             {/* Defining the title */}
@@ -42,7 +43,7 @@ const Product = ({ id, title, price, description, category, image }) => {
 
             {hasPrime && (
                 <div className="flex items-center space-x-2 -mt-5">
-                    <img className='w-12' src="https://res.cloudinary.com/djfdsdzxo/image/upload/v1685101417/amazon_prime_icon_ofg3mm.png" alt="primelogo" />
+                    <Image src="https://res.cloudinary.com/djfdsdzxo/image/upload/v1685101417/amazon_prime_icon_ofg3mm.png" width={48} height={3} alt="primelogo" />
                     <p className='text-xs text-gray-500'>FREE Delivery over ₹499. Fulfilled by Amazon.</p>
                 </div>
             )}
