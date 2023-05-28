@@ -17,7 +17,7 @@ const Product = ({ id, title, price, description, category, image }) => {
     return (
         <div className='relative flex flex-col m-5 z-30 p-10 bg-white items-center justify-center'>
             {/* Defining the category */}
-            <p className='absolute top-2 right-2 text-xs italic text-gray-400'>{category}</p>
+            <div className='absolute top-2 right-2 text-xs italic text-gray-400'>{category}</div>
             <Image
                 src={image}
                 height={200}
@@ -33,18 +33,18 @@ const Product = ({ id, title, price, description, category, image }) => {
                 {Array(rating)
                     .fill()
                     .map((_, i) => (
-                        <StarIcon key={id} className='h-5 fill-[#EFA335]' />
+                        <StarIcon key={i} className='h-5 fill-[#EFA335]' />
                     ))}
             </div>
 
-            <p className='text-xs my-2 line-clamp-2'>{description}</p>
+            <div className='text-xs my-2 line-clamp-2'>{description}</div>
 
             <div className='mb-5'>&#8377;{price}</div>
 
             {hasPrime && (
                 <div className="flex items-center space-x-2 -mt-5">
                     <Image src="https://res.cloudinary.com/djfdsdzxo/image/upload/v1685101417/amazon_prime_icon_ofg3mm.png" width={48} height={3} alt="primelogo" />
-                    <p className='text-xs text-gray-500'>FREE Delivery over ₹499. Fulfilled by Amazon.</p>
+                    <div className='text-xs text-gray-500'>FREE Delivery over ₹499. Fulfilled by Amazon.</div>
                 </div>
             )}
 

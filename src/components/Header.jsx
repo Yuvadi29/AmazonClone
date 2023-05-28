@@ -26,17 +26,17 @@ const Header = () => {
 
       {/* Bottom Navbar */}
       <div className='flex items-center space-x-3 p-2 pl-6 bg-Amazon_blue-light text-sm text-white'>
-        <p className='link flex items-center'><Bars4Icon className='h-6 mr-1' />All</p>
-        <p className="link">Today&apos;s Deals</p>
-        <p className="link">Amazon miniTV</p>
-        <p className="link">Sell</p>
-        <p className="link hidden lg:inline-flex">Gift Cards</p>
-        <p className="link hidden lg:inline-flex">Coupons</p>
-        <p className="link hidden lg:inline-flex">Pet Supplies</p>
-        <p className="link hidden lg:inline-flex">Buy Again</p>
-        <p className="link hidden lg:inline-flex">Amazon Pay</p>
-        <p className="link hidden lg:inline-flex">Sports, Fitness & Outdoors</p>
-        <p className="link hidden lg:inline-flex">Books</p>
+        <div className='link flex items-center'><Bars4Icon className='h-6 mr-1' />All</div>
+        <div className="link">Today&apos;s Deals</div>
+        <div className="link">Amazon miniTV</div>
+        <div className="link">Sell</div>
+        <div className="link hidden lg:inline-flex">Gift Cards</div>
+        <div className="link hidden lg:inline-flex">Coupons</div>
+        <div className="link hidden lg:inline-flex">Pet Supplies</div>
+        <div className="link hidden lg:inline-flex">Buy Again</div>
+        <div className="link hidden lg:inline-flex">Amazon Pay</div>
+        <div className="link hidden lg:inline-flex">Sports, Fitness & Outdoors</div>
+        <div className="link hidden lg:inline-flex">Books</div>
 
       </div>
     </header>
