@@ -6,6 +6,9 @@ import {
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const Search = () => {
+
+    const {data: session} = useSession();
+
     return (
         <>
             <div className='hidden sm:flex rounded-md flex-grow bg-[#FEBD69] hover:bg-[#EFA335] cursor-pointer items-center h-10'>
@@ -15,8 +18,10 @@ const Search = () => {
 
             {/*Shopping Cart section  */}
             <div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
-                <div className='link' onClick={() => signIn()}>
-                    <div>Hello, Aditya</div>
+                <div className='link' onClick={!session ? () => signIn() : () => signOut}>
+                    <div>
+                        {session ? `Hello, ${session.user.name}` : `SignIn`}
+                    </div>
                     <div className='font-extrabold md:text-sm'>Account & Lists</div>
                 </div>
 
