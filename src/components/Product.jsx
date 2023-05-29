@@ -1,8 +1,13 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';
+import { useDispatch } from 'react-redux';
+import { addtoCart } from '../slices/cartSlice';
 
 const Product = ({ id, title, price, description, category, image }) => {
+
+    // This is used to call into the Slice to fetch a piece of information, whenever we click on a button to an action.
+    const dispatch = useDispatch();
 
     const MAX_RATING = 5;
     const MIN_RATING = 1;
@@ -15,6 +20,16 @@ const Product = ({ id, title, price, description, category, image }) => {
         setRating(Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING);
         setHasPrime(Math.random() < 0.5);
     }, []);
+
+    // Function gets triggered on clicking add to cart button
+    const addItemtoCart = () => {
+        // Sending the product as an action to the CartSlice so as to add the product to the cart
+        const product = {
+            id, title, price, description, category, image
+        };
+
+        dispatch(addtoCart(product));
+    }
 
 
     return (
@@ -50,7 +65,7 @@ const Product = ({ id, title, price, description, category, image }) => {
                     <div className='text-xs text-gray-500'>FREE Delivery over ₹499. Fulfilled by Amazon.</div>
                 </div>
             )}
-            <button className='mt-auto button'>Add to Cart</button>
+            <button onClick={() => addItemtoCart()} className='mt-auto button'>Add to Cart</button>
         </div>
     );
 }

@@ -5,11 +5,14 @@ import {
 } from '@heroicons/react/24/outline';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { selectItems } from '../slices/cartSlice';
 
 const Search = () => {
 
     const { data: session } = useSession();
     const router = useRouter();
+    const items = useSelector(selectItems); //This hook will select items from the cartSlice which we have made as a Global store
 
     return (
         <>
@@ -33,7 +36,7 @@ const Search = () => {
                 </div>
 
                 <div onClick={() => router.push('/checkout')} className='relative link flex items-center'>
-                    <div className='absolute top-0 right-0 md:right-10 h-4 w-4 bg-[#EFA335] text-center rounded-full text-black font-bold'>0</div>
+                    <div className='absolute top-0 right-0 md:right-10 h-4 w-4 bg-[#EFA335] text-center rounded-full text-black font-bold'>{items.length}</div>
                     <ShoppingCartIcon className='h-10' />
                     <div className='hidden md:inline font-extrabold md:text-sm mt-2'>Cart</div>
                 </div>
