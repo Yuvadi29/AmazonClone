@@ -2,8 +2,12 @@ import Image from 'next/image';
 import React from 'react';
 import Search from './Search';
 import { Bars4Icon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/router';
 
 const Header = () => {
+  
+  const router = useRouter();
+
   return (
     <header>
       {/* Top Navbar */}
@@ -17,6 +21,7 @@ const Header = () => {
             height={40}
             objectFit="contain"
             className='cursor-pointer'
+            onClick={() => router.push('/')}
           />
         </div>
 
