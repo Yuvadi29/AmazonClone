@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';
 
 const Product = ({ id, title, price, description, category, image }) => {
@@ -7,11 +7,14 @@ const Product = ({ id, title, price, description, category, image }) => {
     const MAX_RATING = 5;
     const MIN_RATING = 1;
     // This will generate a random number for every rating star.
-    const [rating] = useState(
-        Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING
-    );
+    const [rating, setRating] = useState(4);
 
-    const [hasPrime] = useState(Math.random() < 0.5);
+    const [hasPrime, setHasPrime] = useState(true);
+
+    useEffect(() => {
+        setRating(Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING);
+        setHasPrime(Math.random() < 0.5);
+    }, []);
 
 
     return (
@@ -28,8 +31,8 @@ const Product = ({ id, title, price, description, category, image }) => {
             {/* Defining the title */}
             <h4 className='my-3'>{title}</h4>
             {/* Defining the rating */}
+            {/* Here what we do is that we take the State of Rating and put it inside an array and fill the array with the StarIcon */}
             <div className="flex">
-                {/* Here what we do is that we take the State of Rating and put it inside an array and fill the array with the StarIcon */}
                 {Array(rating)
                     .fill()
                     .map((_, i) => (
@@ -47,7 +50,6 @@ const Product = ({ id, title, price, description, category, image }) => {
                     <div className='text-xs text-gray-500'>FREE Delivery over ₹499. Fulfilled by Amazon.</div>
                 </div>
             )}
-
             <button className='mt-auto button'>Add to Cart</button>
         </div>
     );
