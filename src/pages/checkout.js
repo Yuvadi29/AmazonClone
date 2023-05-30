@@ -4,10 +4,12 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectItems } from '../slices/cartSlice';
 import CheckoutProduct from '../components/CheckoutProduct';
+import { useSession } from 'next-auth/react';
 
 const Checkout = ({ id, title, description, price, rating, category, image, hasPrime }) => {
 
   const items = useSelector(selectItems);
+  const session = useSession();
 
   return (
     <div className='bg-[#EAEDED]'>
@@ -43,20 +45,32 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
               />
             ))}
           </div>
-
-
-
         </div>
 
 
         {/* Right Section */}
-        <div className="">
+        <div className="flex flex-col bg-white p-10 shadow-md">
+          {items.length > 0 && (
+            <>
+              <div className="whitespace-nowrap">
+                Total ({items.length}items) :
+                <span className='font-bold'>
 
+                </span>
+              </div>
+
+              <button 
+              disabled = {!session}
+              className={`button mt-2 ${!session && "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"}`}>
+                {!session ? 'SignIn to Checkout' : 'Proceed to Checkout'}
+              </button>
+            </>
+          )}
         </div>
 
-      </main>
+      </main >
 
-    </div>
+    </div >
   )
 }
 

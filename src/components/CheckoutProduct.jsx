@@ -1,8 +1,30 @@
 import { StarIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import React from 'react';
+import { addtoCart, removeFromCart } from '../slices/cartSlice';
+import { useDispatch } from 'react-redux';
 
 const CheckoutProduct = ({ id, title, description, price, rating, category, image, hasPrime }) => {
+
+  const dispatch = useDispatch();
+
+  const addItemtoCart = () => {
+    const product = {
+      id, title, price, description, category, image, hasPrime, rating
+    };
+
+    dispatch(addtoCart(product));
+  }
+
+  const removeItemFromCart = () => {
+    const product = {
+      id, title, price, description, category, image, hasPrime, rating
+    };
+
+    dispatch(removeFromCart({ id }));
+  }
+
+
   return (
     <div className='grid grid-cols-5'>
       <Image
@@ -42,8 +64,12 @@ const CheckoutProduct = ({ id, title, description, price, rating, category, imag
 
       </div>
 
+      {/* Add and remove from Cart Buttons */}
+      <div className="flex flex-col space-y-2 my-auto justify-self-end">
+        <button className='button' onClick={addItemtoCart}>Add to Cart</button>
+        <button className='button' onClick={removeItemFromCart}>Remove</button>
+      </div>
 
-      
     </div>
   )
 }
