@@ -25,7 +25,7 @@ const Product = ({ id, title, price, description, category, image }) => {
     const addItemtoCart = () => {
         // Sending the product as an action to the CartSlice so as to add the product to the cart
         const product = {
-            id, title, price, description, category, image
+            id, title, price, description, category, image, hasPrime, rating
         };
 
         dispatch(addtoCart(product));
