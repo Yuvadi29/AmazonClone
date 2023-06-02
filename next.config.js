@@ -2,6 +2,9 @@
 const nextConfig = {
     images: {
         domains: ['res.cloudinary.com', 'fakestoreapi.com']
+    },
+    env: {
+        STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY
     }
 }
 

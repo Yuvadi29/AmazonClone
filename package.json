@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@stripe/stripe-js": "^1.54.0",
     "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "firebase": "^9.22.1",

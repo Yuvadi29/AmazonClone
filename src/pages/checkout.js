@@ -6,6 +6,7 @@ import { selectItems, selectTotal } from '../slices/cartSlice';
 import CheckoutProduct from '../components/CheckoutProduct';
 import { useSession } from 'next-auth/react';
 import { loadStripe } from '@stripe/stripe-js';
+import axios from 'axios';
 const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
 const Checkout = ({ id, title, description, price, rating, category, image, hasPrime }) => {
@@ -14,9 +15,35 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
   const totalitem = useSelector(selectTotal);
   const session = useSession();
 
-  const createCheckoutSession = () => {
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise;
 
-  }
+    // Call the backend to create a checkout session
+    const checkoutSession = await axios.post('/api/create-checkout-session',
+      // Data to be passed in the API
+      {
+        items: items.map(item => ({
+          id: item.id,
+          title: item.title,
+          description: item.description,
+          category: item.category,
+          price: item.price,
+          hasPrime: item.hasPrime,
+          image: item.image,
+          rating: item.rating,
+          quantity: item.quantity,
+      })),
+      });
+
+    // Redirect user to the Stripe Checkout
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id
+    })
+
+    if (result.error) {
+      alert(result.error.message);
+    }
+  };
 
 
   return (
