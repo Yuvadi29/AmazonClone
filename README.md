@@ -36,3 +36,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Redux
 Basically Redux acts as a global store for storing the information and then we access the point of information from it with the help of references
+
+## Stripe Checkout
+We will be using Stripe Checkout Functionality when all items are added to the cart and we want to checkout to payment. 

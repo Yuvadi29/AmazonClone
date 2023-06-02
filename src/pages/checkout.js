@@ -5,12 +5,19 @@ import { useSelector } from 'react-redux';
 import { selectItems, selectTotal } from '../slices/cartSlice';
 import CheckoutProduct from '../components/CheckoutProduct';
 import { useSession } from 'next-auth/react';
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
 const Checkout = ({ id, title, description, price, rating, category, image, hasPrime }) => {
 
   const items = useSelector(selectItems);
   const totalitem = useSelector(selectTotal);
   const session = useSession();
+
+  const createCheckoutSession = () => {
+
+  }
+
 
   return (
     <div className='bg-[#EAEDED]'>
@@ -56,11 +63,13 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
               <div className="whitespace-nowrap">
                 Total ({items.length}items) : {" "}
                 <span className='font-bold'>
-                 Total Price: &#8377;{totalitem}
+                  Total Price: &#8377;{totalitem}
                 </span>
               </div>
 
               <button
+                role="link"
+                onClick={createCheckoutSession}
                 disabled={!session}
                 className={`button mt-2 ${!session && "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"}`}>
                 {!session ? 'SignIn to Checkout' : 'Proceed to Checkout'}
