@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import { getSession, useSession } from 'next-auth/react';
 import db from '../../firebase.js';
+import Order from '../components/ORder';
 
 const orders = ({ orders }) => {
     const session = useSession();
@@ -20,7 +21,14 @@ const orders = ({ orders }) => {
                     <div>Sign In to see your Orders</div>
                 )}
 
-                <div className='mt-5 space-y-4'></div>
+                <div className='mt-5 space-y-4'>
+                    {orders?.map(
+                        ({ id, amount, amountShipping, items, timestamp, images }
+                        ) => (
+                            <Order />
+                        )
+                    )}
+                </div>
             </main>
         </div>
     )
@@ -34,7 +42,7 @@ export async function getServerSideProps(context) {
     // Get the User logged in Credentials
     const session = getSession(context);
 
-    if(!session) {
+    if (!session) {
         return {
             props: {},
         };
