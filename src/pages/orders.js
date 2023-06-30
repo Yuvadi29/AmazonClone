@@ -5,7 +5,7 @@ import db from '../../firebase.js';
 import Order from '../components/Order';
 
 const orders = ({ orders }) => {
-    const session = useSession();
+    // const session = useSession();
 
     return (
         <div>
@@ -21,14 +21,14 @@ const orders = ({ orders }) => {
                     <div>Sign In to see your Orders</div>
                 )}
 
-                <div className='mt-5 space-y-4'>
+                {/* <div className='mt-5 space-y-4'>
                     {orders?.map(
                         ({ id, amount, amountShipping, items, timestamp, images }
                         ) => (
                             <Order />
                         )
                     )}
-                </div>
+                </div> */}
             </main>
         </div>
     )
