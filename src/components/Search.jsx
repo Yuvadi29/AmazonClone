@@ -10,7 +10,14 @@ import { selectItems } from '../slices/cartSlice';
 
 const Search = () => {
 
+    const data = {
+        user: {
+            name: String,
+            email: String
+        }
+    }
     const { data: session } = useSession();
+    // console.log(data);
     const router = useRouter();
     const items = useSelector(selectItems); //This hook will select items from the cartSlice which we have made as a Global store
 

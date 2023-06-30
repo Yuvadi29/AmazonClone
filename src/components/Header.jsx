@@ -19,8 +19,7 @@ const Header = () => {
             alt='amazonlogo'
             width={150}
             height={40}
-            objectFit="contain"
-            className='cursor-pointer'
+            className='cursor-pointer object-contain'
             onClick={() => router.push('/')}
           />
         </div>
