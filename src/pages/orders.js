@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import { getSession, useSession } from 'next-auth/react';
 import db from '../../firebase.js';
-import Order from '../components/ORder';
+import Order from '../components/Order';
 
 const orders = ({ orders }) => {
     const session = useSession();
