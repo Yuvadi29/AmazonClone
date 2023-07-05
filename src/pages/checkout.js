@@ -32,7 +32,7 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
           image: item.image,
           rating: item.rating,
           quantity: item.quantity,
-      })),
+        })),
       });
 
     // Redirect user to the Stripe Checkout

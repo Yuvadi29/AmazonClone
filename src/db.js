@@ -26,4 +26,4 @@ if (process.env.MONGO_URL === 'development') {
     clientPromise = client.connect()
 }
 
-export default clientPromise
+export default clientPromise;

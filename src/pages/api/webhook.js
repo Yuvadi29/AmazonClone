@@ -1,32 +1,58 @@
+import clientPromise from "@/src/db";
 
-import clientPromise from '@/src/db';
-import { buffer } from 'micro';
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const express = require('express');
+const app = express();
 
-const handler = async (req, res) => {
-    if (req.method === 'POST') {
-        const buf = await buffer(req);
-        const sig = req.headers['stripe-signature'];
-        const event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_SIGNING_SECRET);
+const endpointSecret = process.env.STRIPE_SIGNING_SECRET;
 
-        handleEvent(event);
+const MongoDB = 'confirmation';
 
-        res.status(200).send('Webhook received successfully');
-    } else {
-        res.setHeader('Allow', 'POST');
-        res.status(405).end('Method Not Allowed');
+app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+    const sig = req.headers['stripe-signature'];
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+
+    } catch (error) {
+        res.status(400).send(`Webhook Error: ${error.message}`);
+        return;
     }
-}
 
-const handleEvent = async (event) => {
-    const db = await clientPromise;
-    const collection = db.collection('stripe_payments');
+    const webhookHandler = async(req, res) =>{
+        const client = await clientPromise;
+        const data = event.object.data;
 
-    // Extract Relevant data from event and save to Mongodb
-    const paymentData = {
-        eventId: event.id,
-        eventType: event.type,
-        data: event.data,
-    };
+        console.log(data);
+    }
 
-    await collection.insertOne(paymentData);
-}
+    webhookHandler();
+
+    // switch(event.type){
+    //     case 'payment_intent.succeeded':
+    //         const paymentIntentSucceeded = event.data.object;
+    //         const data = JSON.parse(paymentIntentSucceeded);
+    //         console.log('Payment data:', data);
+            
+    //         try {
+    //             const client = await clientPromise;
+    //             const db = client.db(MongoDB);
+    //             const collection = db.collection('orders');
+            
+    //             await collection.insertOne(data);
+    //             console.log('Payment data stored in MongoDB');
+    //         } catch (error) {
+    //             console.error('Error storing payment data in MongoDB:', error);
+    //         }
+
+    //         break;
+
+    //     default:
+    //         console.log(`Unhandled Event type ${event.type}`);
+    // }
+    // res.send();
+});
+
+app.listen(3000, () => console.log('Running on port 3000'));
