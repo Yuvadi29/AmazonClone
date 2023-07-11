@@ -1,58 +1,69 @@
-import clientPromise from "@/src/db";
+import { buffer } from "micro";
+import * as admin from "firebase-admin";
 
+
+
+// Secure a connection to firebase
+var serviceAccount = require("../../../permissions.json");
+// Initialise the app
+const app = !admin.apps.length ? admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+}) : admin.app();
+
+
+// Establish connection to stripe
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const express = require('express');
-const app = express();
 
-const endpointSecret = process.env.STRIPE_SIGNING_SECRET;
+const endPointSecret = process.env.STRIPE_SIGNING_SECRET;
 
-const MongoDB = 'confirmation';
+const fulfillOrder = async (session) => {
+    console.log('FulFilling Order', session);
 
-app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-    const sig = req.headers['stripe-signature'];
 
-    let event;
+    return app.firestore().collection("users").doc(session.metadata.email()).collection("orders").doc(session.id).set({
+        amount: session.unit_amount_decimal / 100,
+        images: JSON.parse(session.metadata.images),
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
+    })
+        .then(() => {
+            console.log(`SUCCESS: Order ${session.id} has been added to database`);
+        }
+    )
+}
 
-    try {
-        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+export default async (req, res) => {
+    if (req.method === 'POST') {
+        const requestBuffer = await buffer(req);
+        const payload = requestBuffer.toString();
+        const sig = req.headers["stripe-signature"];
 
-    } catch (error) {
-        res.status(400).send(`Webhook Error: ${error.message}`);
-        return;
+        let event;
+
+        // Verify that event posted came from stripe
+        try {
+            event = stripe.webhooks.constructEvent(payload, sig, endPointSecret);
+        } catch (error) {
+            console.log('Error', error.message);
+            return res.status(400).send(`Webhook Error: ${err.message}`);
+        }
+
+        // Handle the checkout.session.completed event
+        if (event.type === 'checkout.session.completed') {
+            const session = event.data.object;
+
+            // FulFill Order
+            return fulfillOrder(session).then(() => res.status(200)).catch(err => res.status(400).send(`Webhook Error: ${err.message}`));
+        }
     }
+}
 
-    const webhookHandler = async(req, res) =>{
-        const client = await clientPromise;
-        const data = event.object.data;
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount)
+// });
 
-        console.log(data);
-    }
-
-    webhookHandler();
-
-    // switch(event.type){
-    //     case 'payment_intent.succeeded':
-    //         const paymentIntentSucceeded = event.data.object;
-    //         const data = JSON.parse(paymentIntentSucceeded);
-    //         console.log('Payment data:', data);
-            
-    //         try {
-    //             const client = await clientPromise;
-    //             const db = client.db(MongoDB);
-    //             const collection = db.collection('orders');
-            
-    //             await collection.insertOne(data);
-    //             console.log('Payment data stored in MongoDB');
-    //         } catch (error) {
-    //             console.error('Error storing payment data in MongoDB:', error);
-    //         }
-
-    //         break;
-
-    //     default:
-    //         console.log(`Unhandled Event type ${event.type}`);
-    // }
-    // res.send();
-});
-
-app.listen(3000, () => console.log('Running on port 3000'));
+export const config = {
+    api: {
+        bodyParser: false,
+        externalResolveer: true
+    },
+};
