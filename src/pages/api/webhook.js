@@ -17,19 +17,30 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endPointSecret = process.env.STRIPE_SIGNING_SECRET;
 
 const fulfillOrder = async (session) => {
-    console.log('FulFilling Order', session);
+    console.log('Fulfilling Order', session);
 
+    const userEmail = session.metadata.email;
+    console.log('User Email:', userEmail);
 
-    return app.firestore().collection("users").doc(session.metadata.email()).collection("orders").doc(session.id).set({
-        amount: session.unit_amount_decimal / 100,
-        images: JSON.parse(session.metadata.images),
-        timestamp: admin.firestore.FieldValue.serverTimestamp()
-    })
-        .then(() => {
-            console.log(`SUCCESS: Order ${session.id} has been added to database`);
-        }
-    )
-}
+    try {
+        await app
+            .firestore()
+            .collection("users")
+            .doc(userEmail)
+            .collection("orders")
+            .doc(session.id)
+            .set({
+                amount: session.amount_total / 100,
+                images: JSON.parse(session.metadata.images),
+                timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            });
+
+        console.log(`SUCCESS: Order ${session.id} has been added to the database`);
+    } catch (error) {
+        console.error(`Error adding order ${session.id} to the database:`, error);
+    }
+};
+
 
 export default async (req, res) => {
     if (req.method === 'POST') {

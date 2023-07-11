@@ -23,6 +23,7 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
       // Data to be passed in the API
       {
         items: items.map(item => ({
+          email: session?.user?.email,
           id: item.id,
           title: item.title,
           description: item.description,
