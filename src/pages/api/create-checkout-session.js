@@ -1,7 +1,10 @@
+import { getSession } from 'next-auth/react';
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async (req, res) => {
-    const { items, email } = req.body;
+    const { items } = req.body;
+    const email = req.body.email;
     console.log(items);
     console.log(email);
 

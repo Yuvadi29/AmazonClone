@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectItems, selectTotal } from '../slices/cartSlice';
 import CheckoutProduct from '../components/CheckoutProduct';
-import { useSession } from 'next-auth/react';
+import { useSession, getSession } from 'next-auth/react';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
@@ -15,15 +15,17 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
   const totalitem = useSelector(selectTotal);
   const session = useSession();
 
+
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
+
 
     // Call the backend to create a checkout session
     const checkoutSession = await axios.post('/api/create-checkout-session',
       // Data to be passed in the API
       {
+        email: session?.data?.user?.email,
         items: items.map(item => ({
-          email: session?.user?.email,
           id: item.id,
           title: item.title,
           description: item.description,
@@ -35,6 +37,8 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
           quantity: item.quantity,
         })),
       });
+
+
 
     // Redirect user to the Stripe Checkout
     const result = await stripe.redirectToCheckout({
@@ -95,21 +99,23 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
                 </span>
               </div>
 
+              {session?.user?.email && (
+                <p className="my-4">Logged in as: {session.user.email}</p>
+              )}
+
               <button
                 role="link"
                 onClick={createCheckoutSession}
                 disabled={!session}
                 className={`button mt-2 ${!session && "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"}`}>
-                {!session ? 'SignIn to Checkout' : 'Proceed to Checkout'}
+                {!session ? 'Sign In to Checkout' : 'Proceed to Checkout'}
               </button>
             </>
           )}
         </div>
-
-      </main >
-
-    </div >
-  )
-}
+      </main>
+    </div>
+  );
+};
 
 export default Checkout;
