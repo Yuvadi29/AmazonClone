@@ -37,6 +37,6 @@ export const { addtoCart, removeFromCart } = cartSlice.actions;
 export const selectItems = (state) => state.cart.items;
 
 // Find out the total value of items
-export const selectTotal = (state) => state.cart.items.reduce((total, item) => total + item.price,0);
+export const selectTotal = (state) => state.cart.items.reduce((total, item) => total + item.price, 0);
 
 export default cartSlice.reducer;

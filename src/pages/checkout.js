@@ -4,12 +4,12 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { selectItems, selectTotal } from '../slices/cartSlice';
 import CheckoutProduct from '../components/CheckoutProduct';
-import { useSession, getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
-const Checkout = ({ id, title, description, price, rating, category, image, hasPrime }) => {
+const Checkout = ({email, id, title, description, price, rating, category, image, hasPrime }) => {
 
   const items = useSelector(selectItems);
   const totalitem = useSelector(selectTotal);
@@ -24,8 +24,8 @@ const Checkout = ({ id, title, description, price, rating, category, image, hasP
     const checkoutSession = await axios.post('/api/create-checkout-session',
       // Data to be passed in the API
       {
-        email: session?.data?.user?.email,
         items: items.map(item => ({
+          email: session?.data?.user?.email,
           id: item.id,
           title: item.title,
           description: item.description,
