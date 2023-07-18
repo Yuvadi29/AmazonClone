@@ -99,9 +99,10 @@ const Checkout = ({email, id, title, description, price, rating, category, image
                 </span>
               </div>
 
-              {session?.user?.email && (
-                <p className="my-4">Logged in as: {session.user.email}</p>
-              )}
+              {/* Checking if the user session is there or not */}
+              {/* {session.data.user.email && (
+                <p className="my-4">Logged in as: {session.data.user.email}</p>
+              )} */}
 
               <button
                 role="link"
