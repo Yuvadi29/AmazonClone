@@ -1,54 +1,73 @@
 import { buffer } from "micro";
-import clientPromise  from "../../db"; // Import your MongoDB connection utility
+import Stripe from "stripe";
+import clientPromise from "@/src/db";
 
-const fulfillOrder = async (session, db) => {
-  console.log('Fulfilling Order', session);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-  const userEmail = session?.metadata?.email;
-  console.log('User Email:', userEmail);
-
-  try {
-    await db.collection("orders").insertOne({
-      userId: userEmail,
-      sessionId: session.id,
-      amount: session.amount_total / 100,
-      images: JSON.parse(session.metadata.images),
-      timestamp: new Date(),
-    });
-
-    console.log(`SUCCESS: Order ${session.id} has been added to the database`);
-  } catch (error) {
-    console.error(`Error adding order ${session.id} to the database:`, error);
-  }
+export const config = {
+  api: {
+    bodyParser: false,
+  },
 };
 
-export default async (req, res) => {
-  if (req.method === 'POST') {
-    const requestBuffer = await buffer(req);
-    const payload = requestBuffer.toString();
-    const sig = req.headers["stripe-signature"];
+const webhookHandler = async (req, res) => {
+  if (req.method === "POST") {
+    const buf = await buffer(req);
+    const secret = process.env.STRIPE_SIGNING_SECRET;
 
     let event;
 
-    // Verify that event posted came from stripe
     try {
-      event = stripe.webhooks.constructEvent(payload, sig, endPointSecret);
-    } catch (error) {
-      console.log('Error', error.message);
-      return res.status(400).send(`Webhook Error: ${error.message}`);
+      event = stripe.webhooks.constructEvent(
+        buf.toString(),
+        req.headers["stripe-signature"],
+        secret
+      );
+    } catch (err) {
+      console.error("Webhook error:", err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // Handle the checkout.session.completed event
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
+    // Handle the event
+    switch (event.type) {
+      case "payment_intent.succeeded":
+        // Payment completed and checkout session is successful
+        console.log("Payment completed:", event.data.object);
 
-      // Connect to the MongoDB database
-      const db = await clientPromise;
+        // Get the MongoDB client and database;
+        const client = await clientPromise;
+        const db = client.db();
 
-      // FulFill Order
-      return fulfillOrder(session, db)
-        .then(() => res.status(200).end())
-        .catch(err => res.status(400).send(`Webhook Error: ${err.message}`));
+        // Extract relevant data from the payment event
+        const {
+          unit_amount_decimal,
+          created,
+          metadata,
+          email, // Retrieve the email from the webhook payload directly
+        } = event.data.object;
+
+        try {
+          await db.collection("orders").insertOne({
+            email: email,
+            unit_amount_decimal,
+            images: metadata.images,
+            timestamp: new Date(created * 1000),
+          });
+          console.log("Payment Data Stored in MongoDB");
+        } catch (error) {
+          console.log("Error Storing data", error);
+        }
+
+        break;
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
     }
+
+    res.status(200).json({ received: true });
+  } else {
+    res.setHeader("Allow", "GET");
+    res.status(405).end("Method Not Allowed");
   }
 };
+
+export default webhookHandler;

@@ -14,7 +14,7 @@ export default async (req, res) => {
                 images: [item.image],
             },
         },
-        quantity: 1,
+        quantity: items.length,
     }));
 
     try {
