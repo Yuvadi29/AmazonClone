@@ -21,10 +21,10 @@ const Search = () => {
     const items = useSelector(selectItems); //This hook will select items from the cartSlice which we have made as a Global store
 
     const handleCartClick = () => {
-        if(session?.user?.email){
+        if (session?.user?.email) {
             router.push({
                 pathname: '/checkout',
-                query: {email: session.user.email},
+                query: { email: session.user.email },
             });
         }
     };
@@ -45,7 +45,7 @@ const Search = () => {
                     <div className='font-extrabold md:text-sm'>Account & Lists</div>
                 </div>
 
-                <div className='link'>
+                <div onClick={() => router.push('/orders')} className='cursor-pointer link'>
                     <div>Returns</div>
                     <div className='font-extrabold md:text-sm'>& Orders</div>
                 </div>
