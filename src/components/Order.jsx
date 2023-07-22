@@ -12,7 +12,7 @@ const Order = ({ id, amount, items, timestamp, images }) => {
         <div>
           <p className='text-xs font-bold'>TOTAL</p>
           <p>
-            &#8377;{price}
+            &#8377;{amount}
           </p>
         </div>
 

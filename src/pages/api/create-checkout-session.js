@@ -29,14 +29,9 @@ export default async (req, res) => {
             payment_intent_data: {
                 metadata: metadata,
             },
-            // metadata: {
-            //     // email: email,
-            //     images: JSON.stringify(items.map(item => item.image)),
-            // },
 
         });
-        // console.log(metadata);
-
+        console.log(session.id);
         res.status(200).json({ id: session.id });
     } catch (error) {
         console.error(error);

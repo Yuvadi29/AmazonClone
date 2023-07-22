@@ -66,17 +66,22 @@ export async function getServerSideProps(context) {
 
     // Stripe orders
     const orders = await Promise.all(
-        stripeOrders.map(async (order) => ({
-            id: order._id,
-            amount: order.price,
-            timestamp: moment(order.timestamp).unix(),
-            items: (
-                await stripe.checkout.sessions.listLineItems(order.id, {
-                    limit: 100,
-                })
-            ).data,
-        }))
+        stripeOrders.map(async (order) => {
+            const sessionId = order._id.toString(); // Convert ObjectID to string
+
+            return {
+                id: sessionId, // Use the string representation of the ObjectID
+                amount: order.amount,
+                timestamp: moment(order.timestamp).unix(),
+                items: (
+                    await stripe.checkout.sessions.listLineItems(sessionId, {
+                        limit: 100,
+                    })
+                ).data,
+            };
+        })
     );
+
 
     return {
         props: {
