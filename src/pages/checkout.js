@@ -24,8 +24,9 @@ const Checkout = ({email, id, title, description, price, rating, category, image
     const checkoutSession = await axios.post('/api/create-checkout-session',
       // Data to be passed in the API
       {
+        email: session?.data?.user?.email,
         items: items.map(item => ({
-          email: session?.data?.user?.email,
+          // email: session?.data?.user?.email,
           id: item.id,
           title: item.title,
           description: item.description,

@@ -40,18 +40,17 @@ const webhookHandler = async (req, res) => {
 
         // Extract relevant data from the payment event
         const {
-          price,
+          amount,
           created,
           metadata,
-          email, // Retrieve the email from the webhook payload directly
         } = event.data.object;
 
         try {
           await db.collection("orders").insertOne({
-            price,
+            amount,
             timestamp: new Date(created * 1000),
             images: metadata.images,
-            email: email,
+            email: metadata.email,
           });
           console.log("Payment Data Stored in MongoDB");
         } catch (error) {
