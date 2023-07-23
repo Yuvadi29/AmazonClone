@@ -47,45 +47,53 @@ export default Orders;
 
 export async function getServerSideProps(context) {
     const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
+  
     const client = await clientPromise;
     const db = client.db();
-
+  
     // Get the users logged-in credentials
     const session = await getSession(context);
-
+  
     if (!session) {
-        return {
-            props: {}
-        };
+      return {
+        props: {}
+      };
     }
-
+  
     const stripeOrders = await db.collection("orders").find({
-        email: session.user.email,
+      email: session.user.email,
     }).toArray();
-
+    console.log('StripeOrders', stripeOrders);
+  
     // Stripe orders
     const orders = await Promise.all(
-        stripeOrders.map(async (order) => {
-            const sessionId = order._id.toString(); // Convert ObjectID to string
-
-            return {
-                id: sessionId, // Use the string representation of the ObjectID
-                amount: order.amount,
-                timestamp: moment(order.timestamp).unix(),
-                items: (
-                    await stripe.checkout.sessions.listLineItems(sessionId, {
-                        limit: 100,
-                    })
-                ).data,
-            };
-        })
-    );
-
-
-    return {
-        props: {
-            orders,
+      stripeOrders.map(async (order) => {
+        const sessionId = order._id.toString(); // Convert ObjectID to string
+  
+        try {
+          // Retrieve session line items from Stripe
+          const lineItems = await stripe.checkout.sessions.listLineItems('cs_test_a1Qe5nymxWiKdCphrzWDLVceSZFspoW93yXXTPwrMPl2sKLhhcLkyRBALk', {
+            limit: 100,
+          });
+  
+          return {
+            id: sessionId, // Use the original ObjectID for reference if needed
+            amount: order.amount,
+            timestamp: moment(order.timestamp).unix(),
+            items: lineItems.data || [], // Use an empty array if lineItems.data is undefined
+          };
+        } catch (error) {
+          // Handle any errors that may occur during the retrieval
+          console.error('Error retrieving session line items from Stripe:', error.message);
+          throw error;
         }
-    }
-}
+      })
+    );
+  
+    return {
+      props: {
+        orders,
+      }
+    };
+  }
+
