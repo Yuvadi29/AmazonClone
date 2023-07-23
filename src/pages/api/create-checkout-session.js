@@ -4,7 +4,7 @@ export default async (req, res) => {
     const { items } = req.body;
     const email = req.body.email;
     // console.log(email);
-    console.log(items);
+    // console.log(items);
 
     const transformedItems = items.map(item => ({
         price_data: {
@@ -29,7 +29,6 @@ export default async (req, res) => {
             payment_intent_data: {
                 metadata: metadata,
             },
-
         });
         console.log(session.id);
         res.status(200).json({ id: session.id });

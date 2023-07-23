@@ -45,6 +45,7 @@ const webhookHandler = async (req, res) => {
           metadata,
         } = event.data.object;
 
+
         try {
           await db.collection("orders").insertOne({
             amount,
