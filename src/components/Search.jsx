@@ -20,14 +20,14 @@ const Search = () => {
     const router = useRouter();
     const items = useSelector(selectItems); //This hook will select items from the cartSlice which we have made as a Global store
 
-    const handleCartClick = () => {
-        if (session?.user?.email) {
-            router.push({
-                pathname: '/checkout',
-                query: { email: session.user.email },
-            });
-        }
-    };
+    // const handleCartClick = () => {
+    //     if (session?.user?.email) {
+    //         router.push({
+    //             pathname: '/checkout',
+    //             query: { email: session.user.email },
+    //         });
+    //     }
+    // };
 
     return (
         <>
@@ -50,7 +50,7 @@ const Search = () => {
                     <div className='font-extrabold md:text-sm'>& Orders</div>
                 </div>
 
-                <div onClick={handleCartClick} className='relative link flex items-center'>
+                <div onClick={() => router.push('/checkout')}className='relative link flex items-center'>
                     <div className='absolute top-0 right-0 md:right-10 h-4 w-4 bg-[#EFA335] text-center rounded-full text-black font-bold'>{items.length}</div>
                     <ShoppingCartIcon className='h-10' />
                     <div className='hidden md:inline font-extrabold md:text-sm mt-2'>Cart</div>
