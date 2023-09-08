@@ -9,7 +9,7 @@ const Chatbot = () => {
 
   return (
     <section
-      className="fixed right-4 bottom-4 bg-transparent text-white py-2 px-4 rounded-full cursor-pointer"
+      className="fixed z-[100] right-4 bottom-4 bg-transparent text-white py-2 px-4 rounded-full cursor-pointer"
     >
       <div className="cursor-pointer" onClick={handleToggle}>
         {toggle ? (
@@ -18,8 +18,8 @@ const Chatbot = () => {
             xmlns="http://www.w3.org/2000/svg"
             x="0px"
             y="0px"
-            width="50"
-            height="50"
+            width="30"
+            height="30"
             viewBox="0 0 80 80"
           >
             <line x1="10" y1="10" x2="70" y2="70" stroke="gray" strokeWidth="5" />
@@ -31,8 +31,8 @@ const Chatbot = () => {
             xmlns="http://www.w3.org/2000/svg"
             x="0px"
             y="0px"
-            width="100"
-            height="100"
+            width="80"
+            height="80"
             viewBox="0 0 80 80"
           >
             {/* Your chat SVG content here */}
