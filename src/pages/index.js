@@ -3,12 +3,15 @@ import Header from "../components/Header";
 import Banner from "../components/Banner";
 import ProductFeed from "../components/ProductFeed";
 import { getSession } from "next-auth/react";
+import Chatbot from "../components/Chatbot";
 
 export default function Home({ products }) {
+
   return (
     <div className="bg-[#E3E6E6]">
       <Head>
         <title>Amazon 2.0</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
@@ -18,6 +21,9 @@ export default function Home({ products }) {
         {/* We pass the props defined here to the ones we have defined in the ProductFeed.jsx file */}
         <ProductFeed products={products} />
       </main>
+
+      {/* Chatbot */}
+      <Chatbot />
     </div>
   );
 }
