@@ -4,6 +4,7 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 
 const Success = () => {
+    
     const router = useRouter();
     return (
         <div className='bg-[#EAEDED] h-screen'>

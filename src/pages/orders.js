@@ -27,7 +27,7 @@ const Orders = ({ orders }) => {
                     {orders?.map((
                         { id, amount, items, timestamp, images }
                     ) => (
-                        <Order
+                        <Order  
                             key={id}
                             id={id}
                             amount={amount}
